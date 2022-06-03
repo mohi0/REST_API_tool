@@ -8,7 +8,63 @@
     <title>Index</title>
 </head>
 <body>
-  <h1> Welcome to the project </h1>
+    <section id="mainSection">
+    <nav id="mainNav">
+        <div v-for="tab in opennedTabs" :class="[ tab.isActive ? 'tabActiveDiv' : 'tabNonActiveDiv' ]" @click="tabClick(tab)">
+            <h1>{{tab.reqObj.url}}</h1>
+            <button @click="closeTabClick(tab)">x</button>
+        </div>
+        <button id="newTabButtonMainNav" @click="newTabClick">
+            +
+        </button>
+    </nav>
+    <aside></aside>
+    <h1 v-if="!showRequestUI" id="noTabMessage">
+        Open a tab To start working
+    </h1>
+    <section id="requestSection" v-if="showRequestUI">
+        <div id="requestHeadersDiv">
+            <h1>Request header</h1>
+            <select id="selectRequestMethod" v-model="currentTab.reqObj.method">
+                <option>POST</option>
+                <option>GET</option>
+                <option>DELETE</option>
+                <option>PUT</option>
+                <option>PATCH</option>
+            </select>
+            <input id="UrlInput" placeholder="URL" v-model="currentTab.reqObj.url" />
+            <button id="sendReqBtn" @click="sendReqButtonClick()">Send</button>
+            <table id="requestHeaderTable">
+                <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Name</th>
+                    <th>Value</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(header, index) in currentTab.reqObj.headers">
+                    <td>{{index}}</td>
+                    <td><input class="tableTextInput" type="text" v-model="header.key"/></td>
+                    <td><input class="tableTextInput" type="text" v-model="header.value"></td>
+                    <td><button @click="deleteButtonHeaderstableRow_Click(index)">Delete</button></td>
+                </tr>
+                </tbody>
+                <tfoot>
+                    <tr><td><button id="AddNewRowBtnHeadersTable" @click="addNewButtonHeadersTable_Click">Add New</button></td></tr>
+                </tfoot>
+            </table>
+        </div>
+        <div id="requestBody">
+            <h1>Request Payload</h1>
+            <textarea id="requestBodyTextArea" v-model="currentTab.reqObj.body"></textarea>
+        </div>
+        <div id="ResponseDiv">
+            <h1 id="mainHeadingResponseDiv">Response</h1>
+            <pre id="mainParaRespnseDiv">{{currentTab.reqObj.responseData}}</pre>
+        </div>
+    </section>
+</section>
 </body>
 <script type="module" src="../main.js">
   require("../main.js")
